@@ -5,12 +5,53 @@ class PostController {
   async create(req, res, next) {
     try {
       console.log("req.body: ", req.body);
-      const { description, title, userId, dueDate } = req.body;
-      const device = await Post.create({ description, title, userId, dueDate });
-      return res.json(device);
+      const { description, title, userId, dueDate, color, countLikes } =
+        req.body;
+      const post = await Post.create({
+        description,
+        title,
+        userId,
+        dueDate,
+        color,
+        countLikes,
+      });
+      return res.json(post);
     } catch (e) {
       next(ApiError.badRequest(e.message));
     }
   }
+  async getAllByUserId(req, res) {
+    const { userId } = req.params;
+
+    const posts = await Post.findAll({
+      where: { userId },
+    });
+
+    return res.json(posts);
+  }
+  async deletePostById(req, res) {
+    debugger;
+    const { id } = req.params;
+    const posts = await Post.destroy({ where: { id } });
+    debugger;
+    return res.json(posts);
+  }
+
+  async updatePostById(req, res) {
+    const { id } = req.params;
+    const { cl } = req.body;
+    const n = await Post.update(
+      {
+        countLikes: cl,
+      },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    res.json({ n });
+  }
 }
+
 module.exports = new PostController();

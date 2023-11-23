@@ -14,6 +14,8 @@ const Post = sequelize.define("post", {
   title: { type: DataTypes.STRING },
   description: { type: DataTypes.STRING },
   dueDate: { type: DataTypes.DATE },
+  color: { type: DataTypes.STRING },
+  countLikes: { type: DataTypes.INTEGER },
 });
 
 User.hasMany(Post);
