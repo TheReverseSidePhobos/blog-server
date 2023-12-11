@@ -30,10 +30,15 @@ class PostController {
     return res.json(posts);
   }
   async deletePostById(req, res) {
-    debugger;
     const { id } = req.params;
     const posts = await Post.destroy({ where: { id } });
-    debugger;
+
+    return res.json(posts);
+  }
+
+  async getAllPosts(req, res) {
+    const posts = await Post.findAll();
+
     return res.json(posts);
   }
 

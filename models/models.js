@@ -18,10 +18,21 @@ const Post = sequelize.define("post", {
   countLikes: { type: DataTypes.INTEGER },
 });
 
+const Like = sequelize.define("like", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  userEmail: { type: DataTypes.STRING },
+});
+Post.hasMany(Like);
+
+Like.belongsTo(Post);
+User.hasMany(Like);
+Like.belongsTo(User);
+
 User.hasMany(Post);
 Post.belongsTo(User);
 
 module.exports = {
   User,
   Post,
+  Like,
 };
