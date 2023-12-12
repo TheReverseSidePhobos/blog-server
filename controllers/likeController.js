@@ -4,7 +4,6 @@ const { Like } = require("../models/models");
 class LikeController {
   async create(req, res, next) {
     try {
-      console.log("req.body: ", req.body);
       const { userId, postId, userEmail } = req.body;
       const like = await Like.create({
         userId,
