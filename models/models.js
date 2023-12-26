@@ -11,6 +11,7 @@ const User = sequelize.define("user", {
 
 const Post = sequelize.define("post", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  uniquePostId: { type: DataTypes.INTEGER },
   title: { type: DataTypes.STRING },
   description: { type: DataTypes.STRING },
   dueDate: { type: DataTypes.DATE },
@@ -20,6 +21,7 @@ const Post = sequelize.define("post", {
 
 const Like = sequelize.define("like", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  uniquePostId: { type: DataTypes.INTEGER },
   userEmail: { type: DataTypes.STRING },
 });
 Post.hasMany(Like);

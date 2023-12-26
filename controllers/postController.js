@@ -4,9 +4,17 @@ const { Post } = require("../models/models");
 class PostController {
   async create(req, res, next) {
     try {
-      const { description, title, userId, dueDate, color, countLikes } =
-        req.body;
+      const {
+        uniquePostId,
+        description,
+        title,
+        userId,
+        dueDate,
+        color,
+        countLikes,
+      } = req.body;
       const post = await Post.create({
+        uniquePostId,
         description,
         title,
         userId,

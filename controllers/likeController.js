@@ -4,10 +4,10 @@ const { Like } = require("../models/models");
 class LikeController {
   async create(req, res, next) {
     try {
-      const { userId, postId, userEmail } = req.body;
+      const { userId, uniquePostId, userEmail } = req.body;
       const like = await Like.create({
         userId,
-        postId,
+        uniquePostId,
         userEmail,
       });
       return res.json(like);
@@ -16,13 +16,25 @@ class LikeController {
     }
   }
   async getAllLikesByPostId(req, res) {
-    const { postId } = req.params;
+    const { uniquePostId } = req.params;
 
     const likes = await Like.findAll({
-      where: { postId },
+      where: { uniquePostId },
     });
 
     return res.json(likes);
+  }
+  async getAllLikes(req, res) {
+    const likes = await Like.findAll();
+
+    return res.json(likes);
+  }
+
+  async deleteLikeById(req, res) {
+    const { uniquePostId, userId } = req.body;
+    const posts = await Like.destroy({ where: { uniquePostId, userId } });
+
+    return res.json(posts);
   }
 }
 
