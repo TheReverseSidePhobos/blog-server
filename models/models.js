@@ -6,7 +6,7 @@ const User = sequelize.define("user", {
   email: { type: DataTypes.STRING, unique: true },
   password: { type: DataTypes.STRING },
   role: { type: DataTypes.STRING, defaultValue: "ADMIN" },
-  // img: { type: DataTypes.STRING, allowNull: true },
+  avatar: { type: DataTypes.STRING, allowNull: true },
 });
 
 const Post = sequelize.define("post", {
@@ -17,6 +17,7 @@ const Post = sequelize.define("post", {
   dueDate: { type: DataTypes.DATE },
   color: { type: DataTypes.STRING },
   countLikes: { type: DataTypes.INTEGER },
+  img: { type: DataTypes.STRING, allowNull: false },
 });
 
 const Like = sequelize.define("like", {

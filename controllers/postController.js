@@ -1,5 +1,7 @@
 const ApiError = require("../error/ApiError");
 const { Post } = require("../models/models");
+const uuid = require("uuid");
+const path = require("path");
 
 class PostController {
   async create(req, res, next) {
@@ -10,17 +12,23 @@ class PostController {
         title,
         userId,
         dueDate,
-        color,
+        selectedColor,
         countLikes,
       } = req.body;
+
+      const { img } = req.files;
+      let fileName = uuid.v4() + ".jpg";
+
+      img.mv(path.resolve(__dirname, "..", "static", fileName));
       const post = await Post.create({
         uniquePostId,
         description,
         title,
         userId,
         dueDate,
-        color,
+        color: selectedColor,
         countLikes,
+        img: fileName,
       });
       return res.json(post);
     } catch (e) {

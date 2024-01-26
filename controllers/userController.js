@@ -2,9 +2,11 @@ const ApiError = require("../error/ApiError");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/models");
+const uuid = require("uuid");
+const path = require("path");
 
-const generateJwt = (id, email, role) => {
-  return jwt.sign({ id, email, role }, process.env.SECRET_KEY, {
+const generateJwt = (id, email, role, avatar) => {
+  return jwt.sign({ id, email, role, avatar }, process.env.SECRET_KEY, {
     expiresIn: "24h",
   });
 };
@@ -12,6 +14,10 @@ const generateJwt = (id, email, role) => {
 class UserController {
   async registration(req, res, next) {
     const { email, password, role } = req.body;
+    const { avatar } = req.files;
+    let fileName = uuid.v4() + ".jpg";
+
+    avatar.mv(path.resolve(__dirname, "..", "static", fileName));
     if (!email || !password) {
       return next(ApiError.badRequest("Некорректный email или password"));
     }
@@ -22,8 +28,13 @@ class UserController {
       );
     }
     const hashPassword = await bcrypt.hash(password, 5);
-    const user = await User.create({ email, role, password: hashPassword });
-    const token = generateJwt(user.id, user.email, user.role);
+    const user = await User.create({
+      email,
+      role,
+      password: hashPassword,
+      avatar: fileName,
+    });
+    const token = generateJwt(user.id, user.email, user.role, user.avatar);
     return res.json({ token });
   }
 
@@ -42,8 +53,20 @@ class UserController {
   }
 
   async check(req, res, next) {
-    const token = generateJwt(req.user.id, req.user.email, req.user.role);
+    const token = generateJwt(
+      req.user.id,
+      req.user.email,
+      req.user.role,
+      req.user.avatar
+    );
     return res.json({ token });
+  }
+  async getUserById(req, res) {
+    const { userId } = req.params;
+    const id = userId;
+    const user = await User.findOne({ where: { id } });
+
+    return res.json(user);
   }
 }
 
