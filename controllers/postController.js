@@ -52,6 +52,12 @@ class PostController {
   }
 
   async getAllPosts(req, res) {
+    const { id } = req.params;
+    const posts = await Post.findAll();
+
+    return res.json(posts);
+  }
+  async getMyPosts(req, res) {
     const posts = await Post.findAll();
 
     return res.json(posts);
